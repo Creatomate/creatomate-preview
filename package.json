@@ -1,0 +1,32 @@
+{
+  "name": "@creatomate/preview",
+  "version": "1.0.0",
+  "description": "Render video and image previews in your web app prior to creating a final MP4, GIF, JPEG or PNG through the API.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepack": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/creatomate/creatomate-preview.git"
+  },
+  "keywords": [],
+  "author": "Creatomate",
+  "license": "MIT",
+  "homepage": "https://creatomate.com/javascript-video-sdk",
+  "devDependencies": {
+    "@types/uuid": "^9.0.0",
+    "prettier": "^2.7.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "uuid": "^9.0.0"
+  }
+}
