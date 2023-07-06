@@ -443,7 +443,10 @@ export class Preview {
     if (!e.data || typeof e.data !== 'object') {
       return;
     }
-
+    // Ignore messages from other sources
+    if (this._iframe.contentWindow !== e.source) {
+      return;
+    }
     const { id, message, error, ...args } = e.data;
 
     if (id) {
