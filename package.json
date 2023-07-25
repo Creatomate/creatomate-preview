@@ -1,6 +1,6 @@
 {
   "name": "@creatomate/preview",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Render video and image previews in your web app prior to creating a final MP4, GIF, JPEG or PNG through the API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
