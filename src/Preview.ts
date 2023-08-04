@@ -52,6 +52,14 @@ export class Preview {
   onToolChange?: (tool: 'default' | 'pen' | 'text' | 'ellipse' | 'rectangle') => void;
 
   /**
+   * Called when the active composition has changed in interactive mode.
+   *
+   * @param elementId The ID of the composition element or 'null' if the main composition is activated.
+   * @see setActiveComposition()
+   */
+  onActiveCompositionChange?: (elementId: string | null) => void;
+
+  /**
    * Called when the active elements have changed in interactive mode.
    *
    * @param elementIds The IDs of the elements that are currently selected.
@@ -260,7 +268,7 @@ export class Preview {
    * Sets the modifications that are applied to the video or image source.
    * Unlike 'applyModifications()', this function does not mutate the source set by 'loadTemplate()' or 'setSource()'.
    *
-   * How do I know when to use 'setModifications' or 'applyModifications'?
+   * When should you use 'setModifications' or 'applyModifications'?
    * - If you use the 'player' mode and wish to replace the content of dynamic elements, 'setModifications()' is probably what you need.
    * - If you use the 'interactive' mode and want to make a definitive change to any element, you'll probably want to use 'applyModifications()' instead.
    *
@@ -316,6 +324,40 @@ export class Preview {
   }
 
   /**
+   * Starts playing the video.
+   *
+   * @see onPlay()
+   */
+  async play(): Promise<void> {
+    return this._sendCommand({ message: 'play' }).catch((error) => {
+      throw new Error(`Failed to play: ${error.message}`);
+    });
+  }
+
+  /**
+   * Pauses the video.
+   *
+   * @see onPause()
+   */
+  async pause(): Promise<void> {
+    return this._sendCommand({ message: 'pause' }).catch((error) => {
+      throw new Error(`Failed to pause: ${error.message}`);
+    });
+  }
+
+  /**
+   * Seeks to the provided playback time.
+   *
+   * @param time Playback time in seconds.
+   * @see onTimeChange()
+   */
+  async setTime(time: number): Promise<void> {
+    return this._sendCommand({ message: 'setTime', time }).catch((error) => {
+      throw new Error(`Failed to set time: ${error.message}`);
+    });
+  }
+
+  /**
    * Sets the current mouse tool.
    *
    * @param tool Any of the available mouse tools; default, pen, text, ellipse, or rectangle.
@@ -324,6 +366,18 @@ export class Preview {
   async setTool(tool: 'default' | 'pen' | 'text' | 'ellipse' | 'rectangle') {
     await this._sendCommand({ message: 'setTool', tool }).catch((error) => {
       throw new Error(`Failed to set tool: ${error.message}`);
+    });
+  }
+
+  /**
+   * Sets the currently active composition when in interactive mode.
+   *
+   * @param elementId The ID of the composition to make active or 'null' to activate the main composition.
+   * @see onActiveCompositionChange()
+   */
+  async setActiveComposition(elementId: string | null): Promise<void> {
+    await this._sendCommand({ message: 'setActiveComposition', elementId }).catch((error) => {
+      throw new Error(`Failed to set active composition: ${error.message}`);
     });
   }
 
@@ -355,40 +409,6 @@ export class Preview {
   async setZoom(mode: 'free' | 'auto' | 'fixed' | 'centered', scale?: number) {
     await this._sendCommand({ message: 'setZoom', mode, scale }).catch((error) => {
       throw new Error(`Failed to set the zoom state: ${error.message}`);
-    });
-  }
-
-  /**
-   * Seeks to the provided playback time.
-   *
-   * @param time Playback time in seconds.
-   * @see onTimeChange()
-   */
-  async setTime(time: number): Promise<void> {
-    return this._sendCommand({ message: 'setTime', time }).catch((error) => {
-      throw new Error(`Failed to set time: ${error.message}`);
-    });
-  }
-
-  /**
-   * Starts playing the video.
-   *
-   * @see onPlay()
-   */
-  async play(): Promise<void> {
-    return this._sendCommand({ message: 'play' }).catch((error) => {
-      throw new Error(`Failed to play: ${error.message}`);
-    });
-  }
-
-  /**
-   * Pauses the video.
-   *
-   * @see onPause()
-   */
-  async pause(): Promise<void> {
-    return this._sendCommand({ message: 'pause' }).catch((error) => {
-      throw new Error(`Failed to pause: ${error.message}`);
     });
   }
 
@@ -509,6 +529,12 @@ export class Preview {
         case 'onToolChange':
           if (this.onToolChange) {
             this.onToolChange(args.tool);
+          }
+          break;
+
+        case 'onActiveCompositionChange':
+          if (this.onActiveCompositionChange) {
+            this.onActiveCompositionChange(args.elementId);
           }
           break;
 
