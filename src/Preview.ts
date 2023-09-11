@@ -366,6 +366,17 @@ export class Preview {
   }
 
   /**
+   * This setting controls whether the video starts over once it has reached the end.
+   *
+   * @param loop Whether or not the video should loop (true by default).
+   */
+  async setLoop(loop: boolean): Promise<void> {
+    await this._sendCommand({ message: 'setLoop', loop }).catch((error) => {
+      throw new Error(`Failed to set loop: ${error.message}`);
+    });
+  }
+
+  /**
    * Sets the current mouse tool.
    *
    * @param tool Any of the available mouse tools; default, pen, text, ellipse, or rectangle.
