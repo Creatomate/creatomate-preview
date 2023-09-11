@@ -1,6 +1,6 @@
 import { ElementState } from './ElementState';
 
-export interface CompositionState {
+export interface CompositionState extends ElementState {
   /**
    * Composition element property. The elements in the composition.
    */

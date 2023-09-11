@@ -1,9 +1,4 @@
-import { CompositionState } from './CompositionState';
-import { TextState } from './TextState';
-import { VideoState } from './VideoState';
-import { AudioState } from './AudioState';
-
-export interface ElementState extends CompositionState, TextState, VideoState, AudioState {
+export interface ElementState {
   /**
    * This element's track number.
    */

@@ -1,6 +1,7 @@
 import { v4 as uuid } from 'uuid';
 import { PreviewState } from './PreviewState';
 import { ElementState } from './ElementState';
+import { CompositionState } from './CompositionState';
 
 export class Preview {
   /**
@@ -261,8 +262,8 @@ export class Preview {
           return element;
         }
 
-        if (element.elements) {
-          const foundNestedElement = this.findElement(predicate, element);
+        if ('elements' in element) {
+          const foundNestedElement = this.findElement(predicate, element as CompositionState);
           if (foundNestedElement) {
             return foundNestedElement;
           }
