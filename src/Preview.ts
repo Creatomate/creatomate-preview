@@ -68,6 +68,14 @@ export class Preview {
   onActiveElementsChange?: (elementIds: string[]) => void;
 
   /**
+   * Called when the scale of the preview has changed.
+   *
+   * @param scale The preview's render scale (1 is 100%).
+   * @see setZoom()
+   */
+  onScaleChange?: (scale: number) => void;
+
+  /**
    * Called when the state of the preview has changed.
    *
    * @param state The current state of the preview.
@@ -541,6 +549,12 @@ export class Preview {
         case 'onActiveElementsChange':
           if (this.onActiveElementsChange) {
             this.onActiveElementsChange(args.elementIds);
+          }
+          break;
+
+        case 'onScaleChange':
+          if (this.onScaleChange) {
+            this.onScaleChange(args.scale);
           }
           break;
 
