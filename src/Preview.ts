@@ -130,7 +130,7 @@ export class Preview {
     iframe.setAttribute('height', '100%');
     iframe.setAttribute('scrolling', 'no');
     iframe.setAttribute('allow', 'autoplay');
-    iframe.setAttribute('src', `https://creatomate.com/embed?token=${publicToken}`);
+    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.3.0&token=${publicToken}`);
     iframe.style.border = 'none';
     iframe.style.display = 'none';
 
@@ -163,6 +163,22 @@ export class Preview {
   async setMode(mode: 'player' | 'interactive'): Promise<void> {
     await this._sendCommand({ message: 'setMode', mode }).catch((error) => {
       throw new Error(`Failed to set mode: ${error.message}`);
+    });
+  }
+
+  /**
+   * Displays or hides the player controls. By default, the controls are visible and allow users to pause, play, and navigate the video.
+   * Even when the controls are hidden, it is still possible to change playback state through 'play()', 'pause()', 'setTime()', etc.
+   * Note that when an image template instead of a video is loaded, the controls are always hidden.
+   *
+   * @param enabled Set to 'true' to show the controls (default), or set to 'false' to hide the controls.
+   * @see play()
+   * @see pause()
+   * @see setTime()
+   */
+  async setControls(enabled: boolean): Promise<void> {
+    return this._sendCommand({ message: 'setControls', enabled }).catch((error) => {
+      throw new Error(`Failed to set controls: ${error.message}`);
     });
   }
 
