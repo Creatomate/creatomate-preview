@@ -130,7 +130,7 @@ export class Preview {
     iframe.setAttribute('height', '100%');
     iframe.setAttribute('scrolling', 'no');
     iframe.setAttribute('allow', 'autoplay');
-    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.3.0&token=${publicToken}`);
+    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.4.0&token=${publicToken}`);
     iframe.style.border = 'none';
     iframe.style.display = 'none';
 
@@ -431,7 +431,6 @@ export class Preview {
 
   /**
    * Sets the zoom state in interactive mode.
-   * NOTE: This is an experimental setting and is likely to change in the near future.
    *
    * Zoom mode can be any of these values:
    * - 'free': Allows the user to freely pan and zoom the canvas. The default option.
@@ -468,7 +467,9 @@ export class Preview {
    * Sets a list of RegExp rules used to determine whether a video asset should be fully cached on the client's device.
    * This is especially useful for large video files that take a long time to download.
    * These rules do not apply to files hosted by the Creatomate CDN, because those are always cached.
-   * NOTE: This is an experimental setting and is likely to change in the near future.
+   *
+   * The cache is disabled by default for video assets not hosted by Creatomate's CDN since @creatomate/preview version 1.4.
+   * You can still cache the assets with a custom RegExp list passed to this function.
    *
    * @param rules A list of regular expressions matched against every video URL.
    * @example
