@@ -379,7 +379,8 @@ export class Preview {
    */
   async setTime(time: number | string): Promise<void> {
     const reg = /(\d+(\.\d+)?)\s*s/
-    const timeValue = reg.exec(time.toString())
+    const regArray = reg.exec(time.toString()) || []
+    const timeValue = regArray[0] 
     return this._sendCommand({ message: 'setTime', timeValue }).catch((error) => {
       throw new Error(`Failed to set time: ${error.message}`);
     });
