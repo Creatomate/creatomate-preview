@@ -371,13 +371,16 @@ export class Preview {
   }
 
   /**
-   * Seeks to the provided playback time.
+   * Seeks to the provided playback time. If provided as a string from time property on element, regex will extract 
+   * the value accordingly.
    *
    * @param time Playback time in seconds.
    * @see onTimeChange()
    */
-  async setTime(time: number): Promise<void> {
-    return this._sendCommand({ message: 'setTime', time }).catch((error) => {
+  async setTime(time: number | string): Promise<void> {
+    const reg = /(\d+(\.\d+)?)\s*s/
+    const timeValue = reg.exec(time.toString())
+    return this._sendCommand({ message: 'setTime', timeValue }).catch((error) => {
       throw new Error(`Failed to set time: ${error.message}`);
     });
   }
