@@ -42,6 +42,10 @@ Check out the demo code provided below for a more comprehensive example.
 
 See the Preview SDK in action here: [Video Preview Demo](https://github.com/Creatomate/video-preview-demo)
 
+### Compatibility
+
+Because live video rendering is very demanding on the device's hardware, this library only works on modern desktop web browsers, such as Chrome, Firefox, Edge, Opera, and Safari. Mobile devices are not supported. Render an MP4 preview through the API to support smartphone devices. Tip: Use the [render_scale](https://creatomate.com/docs/api/rest-api/post-v1-renders) API parameter (10% to 100%) to generate a low-resolution preview without changing the composition or template.
+
 ## Issues & Comments
 
 Feel free to contact us if you encounter any issues with the library or Creatomate API at [support@creatomate.com](mailto:support@creatomate.com).
