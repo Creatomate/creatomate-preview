@@ -130,7 +130,7 @@ export class Preview {
     iframe.setAttribute('height', '100%');
     iframe.setAttribute('scrolling', 'no');
     iframe.setAttribute('allow', 'autoplay');
-    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.4.0&token=${publicToken}`);
+    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.5.0&token=${publicToken}`);
     iframe.style.border = 'none';
     iframe.style.display = 'none';
 
