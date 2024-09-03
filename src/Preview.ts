@@ -114,6 +114,11 @@ export class Preview {
   private _pendingPromises: Record<string, { resolve: (value: any) => void; reject: (reason: any) => void }> = {};
 
   /**
+   * The API key for authenticated requests.
+   */
+  private apiKey: string | null = null;
+
+  /**
    * Sets up the Creatomate Web SDK plugin. You can choose between 'player' and 'interactive' modes.
    * - The player mode offers a static video player with a play button and time scrubber.
    * - In interactive mode, users can change the content by dragging and dropping, just like in Creatomate's template editor.
@@ -121,9 +126,13 @@ export class Preview {
    * @param element The HTML DIV element to use as a container. The preview automatically adjusts the size of this element.
    * @param mode Choose 'player' or 'interactive'. When in doubt, choose 'player'.
    * @param publicToken Your project's public token. You can find your token in your Creatomate dashboard under project settings.
+   * @param apiKey Optional. Your API key for authenticated requests.
    */
-  constructor(public element: HTMLDivElement, mode: 'player' | 'interactive', publicToken: string) {
+  constructor(public element: HTMLDivElement, mode: 'player' | 'interactive', publicToken: string, apiKey?: string) {
     this.mode = mode;
+    if (apiKey) {
+      this.apiKey = apiKey;
+    }
 
     const iframe = document.createElement('iframe');
     iframe.setAttribute('width', '100%');
@@ -389,8 +398,8 @@ export class Preview {
    */
   async setLoop(loop: boolean): Promise<void> {
     await this._sendCommand({ message: 'setLoop', loop }).catch((error) => {
-      throw new Error(`Failed to set loop: ${error.message}`);
-    });
+      throw new Error(`Failed to set loop: ${error.message}`
+});
   }
 
   /**
@@ -483,13 +492,25 @@ export class Preview {
     });
   }
 
+  /**
+   * Sets the API key for authenticated requests.
+   * @param apiKey The API key to use for authentication.
+   */
+  setApiKey(apiKey: string): void {
+    this.apiKey = apiKey;
+  }
+
   private _sendCommand(message: Record<string, any>, payload?: Record<string, any>): Promise<any> {
     if (!this.ready) {
       throw new Error('The SDK is not yet ready. Please wait for the onReady event before calling any methods.');
     }
 
     const id = uuid();
-    this._iframe.contentWindow?.postMessage({ id, ...JSON.parse(JSON.stringify(message)), ...payload }, '*');
+    const messageWithAuth = this.apiKey
+      ? { ...message, apiKey: this.apiKey }
+      : message;
+
+    this._iframe.contentWindow?.postMessage({ id, ...JSON.parse(JSON.stringify(messageWithAuth)), ...payload }, '*');
 
     // Create pending promise
     return new Promise((resolve, reject) => (this._pendingPromises[id] = { resolve, reject }));
