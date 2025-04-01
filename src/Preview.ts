@@ -130,7 +130,7 @@ export class Preview {
     iframe.setAttribute('height', '100%');
     iframe.setAttribute('scrolling', 'no');
     iframe.setAttribute('allow', 'autoplay');
-    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.5.0&token=${publicToken}`);
+    iframe.setAttribute('src', `https://creatomate.com/embed?version=1.6.0&token=${publicToken}`);
     iframe.style.border = 'none';
     iframe.style.display = 'none';
 
@@ -187,9 +187,12 @@ export class Preview {
    * Make sure the template is located in the project from which you are using the public token.
    *
    * @param templateId The ID of the template.
+   * @param createUndoPoint Set to 'true' if you wish to add an undo point to be used later with 'undo()' and 'redo()'.
+   * @see undo()
+   * @see redo()
    */
-  async loadTemplate(templateId: string): Promise<void> {
-    await this._sendCommand({ message: 'setTemplate', templateId }).catch((error) => {
+  async loadTemplate(templateId: string, createUndoPoint = false): Promise<void> {
+    await this._sendCommand({ message: 'setTemplate', templateId, createUndoPoint }).catch((error) => {
       throw new Error(`Failed to load template: ${error.message}`);
     });
 
@@ -326,7 +329,7 @@ export class Preview {
   }
 
   /**
-   * Reverts the last changes made by 'setSource()', 'applyModifications()', or the user when in interactive mode.
+   * Reverts the last changes made by 'loadTemplate', 'setSource()', 'applyModifications()', or the user when in interactive mode.
    *
    * @see setSource()
    * @see applyModifications()
@@ -345,6 +348,19 @@ export class Preview {
   async redo(): Promise<void> {
     return this._sendCommand({ message: 'redo' }).catch((error) => {
       throw new Error(`Failed to redo: ${error.message}`);
+    });
+  }
+
+  /**
+   * Clears the undo history stack, preventing undoing or redoing previous changes.
+   *
+   * @param stack Specify 'undo' or 'redo' to only clear their respective states, or omit this parameter to clear both.
+   * @see undo()
+   * @see redo()
+   */
+  async clearHistory(stack?: 'undo' | 'redo'): Promise<void> {
+    return this._sendCommand({ message: 'clearHistory', stack }).catch((error) => {
+      throw new Error(`Failed to clear the history: ${error.message}`);
     });
   }
 
