@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { PreviewState } from './PreviewState';
 import { ElementState } from './ElementState';
 import { CompositionState } from './CompositionState';
@@ -112,6 +111,8 @@ export class Preview {
   private readonly _iframe: HTMLIFrameElement;
 
   private _pendingPromises: Record<string, { resolve: (value: any) => void; reject: (reason: any) => void }> = {};
+
+  private _nextMessageId = 0;
 
   /**
    * Sets up the Creatomate Web SDK plugin. You can choose between 'player' and 'interactive' modes.
@@ -504,7 +505,7 @@ export class Preview {
       throw new Error('The SDK is not yet ready. Please wait for the onReady event before calling any methods.');
     }
 
-    const id = uuid();
+    const id = `msg-${++this._nextMessageId}`;
     this._iframe.contentWindow?.postMessage({ id, ...JSON.parse(JSON.stringify(message)), ...payload }, '*');
 
     // Create pending promise
